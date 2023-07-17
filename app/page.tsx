@@ -99,13 +99,14 @@ export default function Home() {
       );
 
       onMessage(messaging, (payload) => {
-        toast({
-          title: payload.data!.title,
-          description: payload.data!.body,
-          status: "success",
-          duration: 3000,
-          isClosable: true
-        })
+        // toast({
+        //   title: payload.data!.title,
+        //   description: payload.data!.body,
+        //   status: "success",
+        //   duration: 3000,
+        //   isClosable: true
+        // })
+        console.log(payload);
       })
     }
 
