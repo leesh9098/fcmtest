@@ -1,6 +1,6 @@
 'use client'
 
-import { useToast } from "@chakra-ui/react";
+// import { useToast } from "@chakra-ui/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import SocketIOClient from "socket.io-client";
@@ -9,7 +9,7 @@ import { getMessaging, onMessage, getToken } from "firebase/messaging";
 
 export default function Home() {
   const [token, setToken] = useState<string>("token");
-  const toast = useToast();
+  // const toast = useToast();
   
   // useEffect(() => {
   //   const socket = SocketIOClient("http://localhost:5000", { transports: ['websocket'] });
@@ -99,13 +99,6 @@ export default function Home() {
       );
 
       onMessage(messaging, (payload) => {
-        // toast({
-        //   title: payload.data!.title,
-        //   description: payload.data!.body,
-        //   status: "success",
-        //   duration: 3000,
-        //   isClosable: true
-        // })
         console.log(payload);
       })
     }
