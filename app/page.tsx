@@ -100,8 +100,8 @@ export default function Home() {
 
       onMessage(messaging, (payload) => {
         toast({
-          title: payload.notification!.title,
-          description: payload.notification!.body,
+          title: payload.data!.title,
+          description: payload.data!.body,
           status: "success",
           duration: 3000,
           isClosable: true
