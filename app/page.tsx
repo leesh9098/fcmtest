@@ -100,8 +100,8 @@ export default function Home() {
 
       onMessage(messaging, (payload) => {
         toast({
-          title: payload.data!.title || "undefined",
-          description: payload.data!.body || "undefined",
+          title: payload.data?.title || "undefined",
+          description: payload.data?.body || "undefined",
           status: "success",
           duration: 3000,
           isClosable: true
