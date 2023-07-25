@@ -83,7 +83,7 @@ export default function Home() {
 
       const messaging = getMessaging(firebaseApp);
 
-      getToken(messaging, { vapidKey: 'BHyG58CG-xSK8YImHKYLQ3-8WxtbodZsvR-3wmh7JKVc7VuQuQBf4WrPlItcmGDyOFC7HE1KF-L855ToWaqzZBU' })
+      getToken(messaging, { vapidKey: 'BD1J2bcOVjUuL8WidJtbNe_3AO4pDFfp6UfiPv_5JPvXpGByYzPJyqyhREiJ-58sGspalXyRi3t5orNJ_jQu3ic' })
         .then((currentToken) => {
           if (currentToken) {
             setToken(currentToken);
@@ -100,13 +100,12 @@ export default function Home() {
 
       onMessage(messaging, (payload) => {
         toast({
-          title: payload.data?.title || "undefined",
-          description: payload.data?.body || "undefined",
+          title: payload.data?.title,
+          description: payload.data?.body,
           status: "success",
           duration: 3000,
           isClosable: true
         })
-        console.log(payload.data);
       })
     }
 
