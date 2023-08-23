@@ -24,6 +24,8 @@ export default function RootLayout({
       <head>
         {/* <Script src='https://www.gstatic.com/firebasejs/10.0.0/firebase-messaging-compat.js' />
         <Script src='https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js' /> */}
+        <link rel="manifest" href='/manifest.json' />
+        <title>Fcm Test</title>
       </head>
       <body className={inter.className}>
         <CacheProvider>

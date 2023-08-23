@@ -1,5 +1,5 @@
 // const path = require('path');
-// const withPWAInit = require('next-pwa');
+const withPWA = require('next-pwa');
 // const withPWA = require("@imbios/next-pwa")({
 //   dest: "public"
 // })
@@ -12,8 +12,10 @@ const nextConfig = {
   reactStrictMode: false,
 }
 
-module.exports = nextConfig;
-// module.exports = withPWA(nextConfig);
+// module.exports = nextConfig;
+module.exports = withPWA({
+  dest: 'public'
+})(nextConfig);
 
 // const withPWA = withPWAInit({
 //   dest: 'public',
