@@ -30,7 +30,7 @@ export default function Home() {
   const sendMessage = () => {
     const title = "알림";
     const body = "알림 내용";
-    const options = { body };
+    const options = { body, silent: false };
 
     const notification = new Notification(title, options);
   }
@@ -69,22 +69,6 @@ export default function Home() {
 
   useEffect(() => {
     async function onMessaging() {
-      if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-        return;
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then((permission) => {
-          if (permission !== "granted") {
-            alert("You denied notification");
-          }
-        })
-      } else {
-        alert("You denied notification");
-      }
-      
-      // const permission = await Notification.requestPermission();
-      // if (permission !== "granted") return;
-
       const firebaseApp = firebase.initializeApp({
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -96,20 +80,37 @@ export default function Home() {
 
       const messaging = getMessaging(firebaseApp);
 
-      getToken(messaging, { vapidKey: 'BD1J2bcOVjUuL8WidJtbNe_3AO4pDFfp6UfiPv_5JPvXpGByYzPJyqyhREiJ-58sGspalXyRi3t5orNJ_jQu3ic' })
-        .then((currentToken) => {
-          if (currentToken) {
-            setToken(currentToken);
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+        return;
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission !== "granted") {
+            alert("You denied notification");
+            return;
           } else {
-            alert('No registration token available. Request permission to generate one.');
-            console.log('No registration token available. Request permission to generate one.');
+            getToken(messaging, { vapidKey: 'BD1J2bcOVjUuL8WidJtbNe_3AO4pDFfp6UfiPv_5JPvXpGByYzPJyqyhREiJ-58sGspalXyRi3t5orNJ_jQu3ic' })
+              .then((currentToken) => {
+                if (currentToken) {
+                  setToken(currentToken);
+                } else {
+                  alert('No registration token available. Request permission to generate one.');
+                  console.log('No registration token available. Request permission to generate one.');
+                }
+              })
+              .catch((err) => {
+                alert(err);
+                console.log('An error occurred while retrieving token. ', err);
+              }
+              );
           }
         })
-        .catch((err) => {
-          alert(err);
-          console.log('An error occurred while retrieving token. ', err);
-        }
-      );
+      } else {
+        alert("You denied notification");
+        return;
+      }
+      // const permission = await Notification.requestPermission();
+      // if (permission !== "granted") return;
 
       onMessage(messaging, (payload) => {
         // console.log(payload);
