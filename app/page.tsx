@@ -35,42 +35,55 @@ export default function Home() {
     const notification = new Notification(title, options);
   }
 
-  const notiButton = () => {
-    // const result = await Notification.requestPermission();
-    // if (result === "granted") {
-    //   sendMessage();
-    // }
-    const firebaseApp = firebase.initializeApp({
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-    })
+  // const notiButton = () => {
+  //   // const result = await Notification.requestPermission();
+  //   // if (result === "granted") {
+  //   //   sendMessage();
+  //   // }
+  //   const firebaseApp = firebase.initializeApp({
+  //     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  //     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  //     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  //     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  //     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  //     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  //   })
 
-    const messaging = getMessaging(firebaseApp);
+  //   const messaging = getMessaging(firebaseApp);
 
-    getToken(messaging, { vapidKey: 'BD1J2bcOVjUuL8WidJtbNe_3AO4pDFfp6UfiPv_5JPvXpGByYzPJyqyhREiJ-58sGspalXyRi3t5orNJ_jQu3ic' })
-      .then((currentToken) => {
-        if (currentToken) {
-          setToken(currentToken);
-        } else {
-          alert('No registration token available. Request permission to generate one.');
-          console.log('No registration token available. Request permission to generate one.');
-        }
-      })
-      .catch((err) => {
-        alert(err);
-        console.log('An error occurred while retrieving token. ', err);
-      }
-      );
-  }
+  //   getToken(messaging, { vapidKey: 'BD1J2bcOVjUuL8WidJtbNe_3AO4pDFfp6UfiPv_5JPvXpGByYzPJyqyhREiJ-58sGspalXyRi3t5orNJ_jQu3ic' })
+  //     .then((currentToken) => {
+  //       if (currentToken) {
+  //         setToken(currentToken);
+  //       } else {
+  //         alert('No registration token available. Request permission to generate one.');
+  //         console.log('No registration token available. Request permission to generate one.');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //       console.log('An error occurred while retrieving token. ', err);
+  //     }
+  //     );
+  // }
 
   useEffect(() => {
     async function onMessaging() {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") return;
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+        return;
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission !== "granted") {
+            alert("You denied notification");
+          }
+        })
+      } else {
+        alert("You denied notification");
+      }
+      
+      // const permission = await Notification.requestPermission();
+      // if (permission !== "granted") return;
 
       const firebaseApp = firebase.initializeApp({
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -99,7 +112,7 @@ export default function Home() {
       );
 
       onMessage(messaging, (payload) => {
-        console.log(payload);
+        // console.log(payload);
         toast({
           title: payload.data?.title,
           description: payload.data?.body,
@@ -127,7 +140,7 @@ export default function Home() {
         padding: "0 16px"
       }}>
         Header area
-        <button onClick={notiButton}>알림</button>
+        {/* <button onClick={notiButton}>알림</button> */}
       </header>
       <section style={{
         width: "100%",
