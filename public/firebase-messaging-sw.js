@@ -13,3 +13,66 @@ const config = {
 firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
+
+self.addEventListener('push', function (event) {
+    event.waitUntil(
+        self.registration.showNotification('푸시알림 테스트', {
+            body: '푸시알림 테스트입니다.',
+            icon: '/next.svg',
+            actions: [
+                {
+                    action: "openUrl",
+                    title: "test",
+                    icon: "/next.svg"
+                }
+            ]
+        })
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    // 클릭시 웹페이지로 이동
+    // 해당 웹페이지가 열려있으면 링크 이동, 아니면 새로운 탭으로 열기
+    // const urlToOpen = new URL('/', self.location.origin).href;
+    // const promiseChain = clients.matchAll({
+    //     type: 'window',
+    //     includeUncontrolled: true
+    // }).then((windowClients) => {
+    //     let matchingClient = null;
+
+    //     for (let i = 0; i < windowClients.length; i++) {
+    //         const windowClient = windowClients[i];
+    //         if (windowClient.url === urlToOpen) {
+    //             matchingClient = windowClient;
+    //             break;
+    //         }
+    //     }
+
+    //     if (matchingClient) {
+    //         return matchingClient.focus();
+    //     } else {
+    //         return clients.openWindow(urlToOpen);
+    //     }
+    // });
+
+    // event.waitUntil(promiseChain);
+    if (event.action === "openUrl") {
+        // naver.com으로 이동
+        clients.openWindow("https://www.naver.com");
+    }
+    event.notification.close();
+});
+
+messaging.onBackgroundMessage((payload) => {
+    const notification = payload.notification;
+
+    console.log("[firebase-messaging-sw.js] Received background message ", notification);
+
+    const notificationTitle = notification.title;
+    const notificationOptions = {
+        body: notification.body,
+        icon: "/next.svg",
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
+});
